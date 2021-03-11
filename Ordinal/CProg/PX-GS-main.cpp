@@ -4,18 +4,8 @@
 // Copyright: 2005 -
 // Description: Parameter Expanded Algorithm
 
-#include <stdio.h>
-#include <math.h>
-#include <string.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_sf_pow_int.h>
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_randist.h>
-#include <gsl/gsl_blas.h>
+
 #include <gsl/gsl_linalg.h>
-#include <gsl/gsl_sf_erf.h>
-#include <gsl/gsl_eigen.h>
-#include <gsl/gsl_cdf.h>
 #include <gsl/gsl_randist.h>
 #include <sys/stat.h>
 
@@ -24,9 +14,9 @@
 #include "MCMC.h"
 #include "Random.h"
 #include "Matrix.h"
-#include "MH.h"
 
 gsl_rng * r;
+
 
 void SampleSig(gsl_matrix * Sigma, gsl_matrix * R, gsl_matrix * W, gsl_matrix * XB, gsl_matrix * Psigma, const int & m, const int & N);
 void Gibbsampler(gsl_matrix * Y, gsl_matrix * X, gsl_matrix * YY, gsl_matrix ** XX, gsl_matrix * Psigma, gsl_matrix ** Gama, gsl_matrix * JJ,
