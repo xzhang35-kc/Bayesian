@@ -4,18 +4,8 @@
 // Copyright: 2005 -
 // Description: Parameter-Extended Random Walk Algorithm
 
-#include <stdio.h>
-#include <math.h>
-#include <string.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_sf_pow_int.h>
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_randist.h>
-#include <gsl/gsl_blas.h>
+
 #include <gsl/gsl_linalg.h>
-#include <gsl/gsl_sf_erf.h>
-#include <gsl/gsl_eigen.h>
-#include <gsl/gsl_cdf.h>
 #include <gsl/gsl_randist.h>
 #include <sys/stat.h>
 
@@ -28,7 +18,8 @@
 
 gsl_rng * r;
 
-void Gibbsampler(gsl_matrix * Y, gsl_matrix * X, gsl_matrix * YY, gsl_matrix ** XX, gsl_matrix * Psigma, gsl_matrix **Gama, gsl_matrix * JJ,
+
+void Gibbsampler(gsl_matrix * Y, gsl_matrix * X, gsl_matrix * YY, gsl_matrix ** XX, gsl_matrix * Psigma, gsl_matrix ** Gama, gsl_matrix * JJ,
                  const int & N, const int & P, const int & rep, const int & S, const int & m, const int & m0, const int & bc,
                  gsl_matrix * b, gsl_matrix * C, char * outBetaFile, char * outZFile, char * outRFile, char * outSigmaFile, char * outGamaFile);
 
@@ -161,7 +152,7 @@ int main(int argc, char * argv[])
 }
 
 // Gibbs sampler, main function
-void Gibbsampler(gsl_matrix * Y, gsl_matrix * X, gsl_matrix * YY, gsl_matrix ** XX, gsl_matrix * Psigma, gsl_matrix **Gama, gsl_matrix * JJ,
+void Gibbsampler(gsl_matrix * Y, gsl_matrix * X, gsl_matrix * YY, gsl_matrix ** XX, gsl_matrix * Psigma, gsl_matrix ** Gama, gsl_matrix * JJ,
                  const int & N, const int & P, const int & rep, const int & S, const int & m, const int & m0, const int & bc,
                  gsl_matrix * b, gsl_matrix * C, char * outBetaFile, char * outZFile, char * outRFile, char * outSigmaFile, char * outGamaFile)
 {
@@ -209,7 +200,7 @@ void Gibbsampler(gsl_matrix * Y, gsl_matrix * X, gsl_matrix * YY, gsl_matrix ** 
 	}
 
 	// open the file for output;
-	FILE *betafp, *zfp, *rfp, *sigfp, *gamafp;
+	FILE * betafp, * zfp, * rfp, * sigfp, * gamafp;
 	if((betafp = fopen(outBetaFile, "w")) == NULL)
 	{
 		printf("can not open file %s in Gibbssampler()!\n", outBetaFile);
