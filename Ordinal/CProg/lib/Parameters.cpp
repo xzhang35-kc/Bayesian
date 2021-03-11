@@ -4,10 +4,11 @@
 // Copyright: 2005 -
 // Description: handle parameters
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Parameters.h"
+
 
 void printPara(const int & N, const int & P, const int & K, const int & S, const int & m, const int & m0, const int & PD,
 	const int & SMH, const int & DFMH, char * dirName, char * yFile, char * xFile, char * outFilePrefix)

@@ -12,4 +12,6 @@ void MatI_J(gsl_matrix * B, gsl_matrix * A, const int & k);
 void Mat_IJ(gsl_matrix * B, gsl_matrix * A, const int & k);
 void Mat_I(gsl_matrix * B, gsl_matrix * A, const int & k);
 void symmetric(gsl_matrix * A);
+double Deter(gsl_matrix * A);
+double Dert(gsl_matrix * A);
 

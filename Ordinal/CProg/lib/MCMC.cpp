@@ -4,7 +4,6 @@
 // Copyright: 2005 -
 // Description: functions for MCMC sampling
 
-#include <gsl/gsl_matrix.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_randist.h>
 
@@ -56,6 +55,7 @@ void cholbeta(gsl_matrix * mu, gsl_matrix * cov, gsl_matrix * Z, gsl_matrix * X,
 	  }
 	}
 	Inv(Siginv, Sig);
+
 	for(int i = 0; i < N; i++)
 	{
 		for(int j = 0; j < K; j++)
@@ -141,7 +141,7 @@ void SampleZ(gsl_matrix * Z, gsl_matrix * sigma, gsl_matrix * XB, gsl_matrix * Y
 		j = i % K;
 		k = (i - j) / K;
 		num = gsl_matrix_get(JJ, j, 0);
-		sigma22 = gsl_matrix_get(sigma,j,j);
+		sigma22 = gsl_matrix_get(sigma, j, j);
 		Mat_I_J(sigma11, sigma, j);
 		Inv(Isigma11, sigma11);
 		Mat_IJ(sigma21, sigma, j);
@@ -162,7 +162,7 @@ void SampleZ(gsl_matrix * Z, gsl_matrix * sigma, gsl_matrix * XB, gsl_matrix * Y
 					gsl_matrix_set(T3, n, 0, a);
 				}
 		}
-		for(n =0; n < K - 1; n++)
+		for(n = 0; n < K - 1; n++)
 		{
 			if((k * K + n) < i)
 				{
@@ -178,11 +178,11 @@ void SampleZ(gsl_matrix * Z, gsl_matrix * sigma, gsl_matrix * XB, gsl_matrix * Y
 
 		gsl_matrix_sub (T3, T4);
 
-		gsl_blas_dgemm (CblasNoTrans,CblasNoTrans,1.0, T1,T3, 0.0, T5);
+		gsl_blas_dgemm (CblasNoTrans,CblasNoTrans,1.0, T1, T3, 0.0, T5);
 
 		u00 = gsl_matrix_get(XB, i, 0) + gsl_matrix_get(T5, 0, 0);
 
-        w = gsl_matrix_get(Y ,i, 0) + 0.000001;
+        w = gsl_matrix_get(Y, i, 0) + 0.000001;
 		if( w == 0)
 		{
 			a = rrtruncnorm(u00, sigma221, 0.0);
@@ -204,7 +204,7 @@ void SampleZ(gsl_matrix * Z, gsl_matrix * sigma, gsl_matrix * XB, gsl_matrix * Y
 			{
 				if(w == n)
 				{
-					a = truncnorm(u00, sigma221, gsl_matrix_get(Gama[j], n - 1, 0), gsl_matrix_get(Gama[j], n,0));
+					a = truncnorm(u00, sigma221, gsl_matrix_get(Gama[j], n - 1, 0), gsl_matrix_get(Gama[j], n, 0));
 					gsl_matrix_set(Z, i, 0, a);
 				}
 			}
@@ -237,23 +237,25 @@ void SampleGama(const int & N, const int & K, const int & bc, gsl_matrix * YY, g
 		}
 	}
 
-	double b, t1, y, z;
+	double b, t1, z;
+	int ll, yy;
 	for(int i = bc; i < K; i++)
 	{
-		for(int j = 1; j < gsl_matrix_get(JJ, i, 0) - 1; j++)
+	    ll = gsl_matrix_get(JJ, i, 0) - 1 + 0.0000001;
+		for(int j = 1; j < ll; j++)
 		{
 			a = gsl_matrix_get(Gama[i], j - 1, 0);
 			b = gsl_matrix_get(Gama[i], j + 1, 0);
 
 			for(int k = 0; k < N; k++)
 			{
-				y = gsl_matrix_get(YY, k, i);
+				yy = gsl_matrix_get(YY, k, i) + 0.0000001;
 				z = gsl_matrix_get(ZZ, k, i);
-				if((y == j) && (a < z))
+				if((yy == j) && (a < z))
 				{
 					a = z;
 				}
-				if((y == j + 1) && (b > z))
+				if((yy == j + 1) && (b > z))
 				{
 					b = z;
 				}

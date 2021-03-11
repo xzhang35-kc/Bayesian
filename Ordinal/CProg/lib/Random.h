@@ -4,6 +4,7 @@
 // Copyright: 2005 -
 // Description: functions related with random variables
 
+
 void InvWishart(gsl_matrix * SigmaMat, const int & m, gsl_matrix * ScaleMat);
 void Wishart(gsl_matrix * w, const int & m, gsl_matrix * Sigma);
 double rltruncnorm(const double & mu, const double & sd, const double & L);

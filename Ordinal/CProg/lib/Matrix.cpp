@@ -4,11 +4,9 @@
 // Copyright: 2005 -
 // Description: functions related to matrix manipulation
 
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_permutation.h>
+
 #include <gsl/gsl_linalg.h>
 
-#include <math.h>
 #include "Matrix.h"
 
 // obtain correlation matrix R from W
@@ -40,7 +38,7 @@ void Inv(gsl_matrix * Ainv, gsl_matrix * A)
 		exit(1);
 	}
 	gsl_permutation * p = gsl_permutation_alloc(m);
-	gsl_matrix * Q = gsl_matrix_alloc(m, n);
+	gsl_matrix * Q = gsl_matrix_alloc(m, m);
 	gsl_matrix_memcpy(Q, A);
 	int signum;
     gsl_linalg_LU_decomp(Q, p, & signum);
@@ -142,3 +140,52 @@ void symmetric(gsl_matrix * A)
 		}
 	}
 }
+
+// compute log determinant of a positive definite matrix A
+// In this routine, A is not changed.
+double Deter(gsl_matrix * A)
+{
+	int K = A -> size1;
+	gsl_matrix * Q = gsl_matrix_alloc(K, K);
+    gsl_permutation * p = gsl_permutation_alloc(K);
+
+	symmetric(A);
+	gsl_matrix_memcpy(Q, A);
+    int signum;
+    gsl_linalg_LU_decomp(Q, p, &signum);
+    double sum = log(gsl_linalg_LU_det(Q, signum));
+
+	gsl_matrix_free(Q);
+	gsl_permutation_free(p);
+
+	return(sum);
+}
+
+// computing the (1/2) log determination of a positive definite matrix A.
+// A is not changed.
+double Dert(gsl_matrix * A)
+{
+	int K = A -> size1;
+	gsl_matrix * Q = gsl_matrix_alloc(K, K);
+
+	symmetric(A);
+	gsl_matrix_memcpy(Q, A);
+
+	// choleskey decomposition
+	gsl_linalg_cholesky_decomp(Q);
+
+	// get the lower triangle matrix Sig
+	double a;
+	double sum = 0;
+	for(int i = 0; i < K; i++)
+	{
+		a = gsl_matrix_get(Q, i, i);
+		sum = sum + log(a);
+	}
+
+	// free memory;
+	gsl_matrix_free(Q);
+
+	return(sum);
+}
+

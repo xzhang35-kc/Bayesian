@@ -4,6 +4,7 @@
 // Copyright: 2005 -
 // Description: functions for MCMC sampling
 
+
 void cholbeta(gsl_matrix * mu, gsl_matrix * cov, gsl_matrix * Z, gsl_matrix * X,
 	gsl_matrix ** XX, gsl_matrix * Sigma, const int & N, gsl_matrix * b, gsl_matrix * C);
 void SampleZ(gsl_matrix * Z, gsl_matrix * sigma, gsl_matrix * XB, gsl_matrix * Y,
