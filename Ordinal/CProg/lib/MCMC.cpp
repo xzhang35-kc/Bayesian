@@ -12,6 +12,7 @@
 
 extern gsl_rng * r;
 
+
 // obtain the mean vector of "mu" and co-variance matrix "cov" of beta
 // input latent variable Z, covariate X, sigma, and sample size N
 void cholbeta(gsl_matrix * mu, gsl_matrix * cov, gsl_matrix * Z, gsl_matrix * X,

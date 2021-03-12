@@ -9,6 +9,48 @@
 
 #include "Matrix.h"
 
+
+void print_gsl_matrix(gsl_matrix * M)
+{
+    int m = M -> size1;
+    int n = M -> size2;
+    double a;
+    for(int i = 0; i < m; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            a = gsl_matrix_get(M, i, j);
+            printf("  %8.5e", a);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+double print_gsl_matrix_diff(gsl_matrix * M, const int &ifp)
+{
+    int m = M -> size1;
+    int n = M -> size2;
+    double a, b;
+    double sum = 0;
+    for(int i = 0; i < m; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            a = gsl_matrix_get(M, i, j);
+            b = gsl_matrix_get(M, j, i);
+            if(ifp > 0)
+                printf("  %8.5e", a - b);
+            sum = sum + fabs(a - b);
+        }
+        if(ifp > 0)
+            printf("\n");
+    }
+    if(ifp > 0)
+        printf("diff is: %8.5e\n", sum);
+    return(sum);
+}
+
 // obtain correlation matrix R from W
 void CorrelationM(gsl_matrix * R, gsl_matrix * Sigma)
 {
@@ -27,7 +69,7 @@ void CorrelationM(gsl_matrix * R, gsl_matrix * Sigma)
 	}
 }
 
-// obtain the inverse of the matrix A which is denoted as Ainv without changing A
+// obtain inverse of s general square matrix (may not be symmetric
 void Inv(gsl_matrix * Ainv, gsl_matrix * A)
 {
 	int m = A -> size1;
@@ -43,14 +85,13 @@ void Inv(gsl_matrix * Ainv, gsl_matrix * A)
 	int signum;
     gsl_linalg_LU_decomp(Q, p, & signum);
 	gsl_linalg_LU_invert(Q, p, Ainv);
-	symmetric(Ainv);
 
 	// free of memory;
 	gsl_matrix_free(Q);
 	gsl_permutation_free(p);
 }
 
-// obtain the jth row from matrix A with jth element deleted.
+// obtain the kth row from matrix A with kth element deleted.
 void MatI_J(gsl_matrix * B, gsl_matrix * A, const int & k)
 {
 	int n = A -> size2;
@@ -63,7 +104,7 @@ void MatI_J(gsl_matrix * B, gsl_matrix * A, const int & k)
 	}
 }
 
-// obtain the jth column from matrix A with jth element deleted.
+// obtain the kth column from matrix A with kth element deleted.
 void Mat_IJ(gsl_matrix * B, gsl_matrix * A, const int & k)
 {
 	int m = A -> size1;
@@ -76,7 +117,7 @@ void Mat_IJ(gsl_matrix * B, gsl_matrix * A, const int & k)
 	}
 }
 
-// obtain the matrix B from matrix A with the jth row deleted.
+// obtain the matrix B from matrix A with the kth row deleted.
 void Mat_I(gsl_matrix * B, gsl_matrix * A, const int & k)
 {
 	int m = A -> size1;
@@ -134,7 +175,7 @@ void symmetric(gsl_matrix * A)
 		{
 			a = gsl_matrix_get(A, j, i);
 			b = gsl_matrix_get(A, i, j);
-			d = (a + b ) / 2;
+			d = (a + b) / 2;
 			gsl_matrix_set(A, i, j, d);
 			gsl_matrix_set(A, j, i, d);
 		}

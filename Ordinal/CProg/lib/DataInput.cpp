@@ -66,17 +66,17 @@ void DataInput(char *dirName, char * yFile, char * xFile, gsl_matrix * Y, gsl_ma
 
 // find number of cut-off points
 // new to revise later
-void FindNumCut(int & ordcut, gsl_matrix * y)
+void FindNumCut(int & ordcut, gsl_matrix * Y)
 {
 	ordcut = -1;
 	int a;
-	int N = y -> size1;
-	int K = y -> size2;
+	int N = Y -> size1;
+	int K = Y -> size2;
 	for(int n = 0; n < N; n++)
 	{
 		for(int k = 0; k < K; k++)
 		{
-			a = gsl_matrix_get(y, n * K + k, 0) + 0.0001;
+			a = gsl_matrix_get(Y, n * K + k, 0) + 0.0001;
 			if(ordcut < a && a != 999)
 				ordcut = a;
 		}

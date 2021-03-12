@@ -69,7 +69,6 @@ void InvWishart(gsl_matrix * SigmaMat, const int & m, gsl_matrix * ScaleMat)
     gsl_matrix_free(InvSig);
 }
 
-/*
 // generate a random matrix from Wishart Distribution with d.f. = m and sigma.
 // all the matrix have been allocated and sigma will not be changed
 void Wishart(gsl_matrix * w, const int & m, gsl_matrix * Sigma)
@@ -121,11 +120,10 @@ void multinorm(gsl_matrix * Mnorm, gsl_matrix * mu, gsl_matrix * sigma)
 	gsl_vector_free(mymu);
 	gsl_vector_free(res);
 }
-*/
 
 // generate a random matrix from Wishart Distribution with d.f. = m and sigma.
 // all the matrix have been allocated and sigma will not be changed
-void Wishart(gsl_matrix * w, const int & m, gsl_matrix * sigma)
+void MHWishart(gsl_matrix * w, const int & m, gsl_matrix * sigma)
 {
 	int K = sigma -> size1;
 	symmetric(sigma);
@@ -186,7 +184,7 @@ void Wishart(gsl_matrix * w, const int & m, gsl_matrix * sigma)
 // generate random number from multivariate normal with mean mu and covariance matrix sigma
 // mu and sigma will not be changed in this function
 // In this function, the random vector is treated as a matrix
-void multinorm(gsl_matrix * Mnorm, gsl_matrix * mu, gsl_matrix * sigma)
+void MHmultinorm(gsl_matrix * Mnorm, gsl_matrix * mu, gsl_matrix * sigma)
 {
 	int K = sigma -> size1;
 
@@ -204,7 +202,7 @@ void multinorm(gsl_matrix * Mnorm, gsl_matrix * mu, gsl_matrix * sigma)
 
 	// copy sigma to Q
 	symmetric(sigma);
-	gsl_matrix_memcpy(Q,sigma);
+	gsl_matrix_memcpy(Q, sigma);
 
 	// choleskey decomposition
 	gsl_linalg_cholesky_decomp(Q);

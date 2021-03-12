@@ -8,10 +8,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 
 void printPara(const int & N, const int & P, const int & K, const int & S, const int & m, const int & m0, const int & PD,
-	const int & SMH, const int & DFMH, char * dirName, char * yFile, char * xFile, char * outFilePrefix)
+	const int & SMH, const int & DFMH, const long int & RS, char * dirName, char * yFile, char * xFile, char * outFilePrefix)
 {
 	printf("Please check carefully if the parameters are correct.\n\n");
 	printf("The following parameters are used in the program:\n");
@@ -31,6 +32,7 @@ void printPara(const int & N, const int & P, const int & K, const int & S, const
     }
 	printf("   The number of iterations for inner MH (only for PX-GSM): %d \n", SMH);
 	printf("   The proposed degrees of freedom for inner MH (only for PX-GSM): %d \n", DFMH);
+	printf("   The seed for random number generator is: %ld \n", RS);
 	printf("   The prefix for the output files is: %s \n", outFilePrefix);
 	printf("   The file directory for input/output files is: %s \n", dirName);
 	printf("   The file name for the responses: %s \n", yFile);
@@ -48,7 +50,7 @@ void printPara(const int & N, const int & P, const int & K, const int & S, const
 }
 
 void setPara(const int & argc, char * argv[], int & N, int & P, int & K, int & S, int & m, int & m0, int & PD,
-	int & SMH, int & DFMH, char * dirName, char * yFile, char * xFile, char * outFilePrefix)
+	int & SMH, int & DFMH, long int & RS, char * dirName, char * yFile, char * xFile, char * outFilePrefix)
 {
 	int k;
 	for(k = 1; k < argc; k++)
@@ -89,6 +91,10 @@ void setPara(const int & argc, char * argv[], int & N, int & P, int & K, int & S
 		{
 			DFMH = atoi(argv[k + 1]);
 		}
+		else if(strcmp(argv[k], "-RS") == 0 && k + 1 < argc) // seed for random number
+		{
+			RS = atoi(argv[k + 1]);
+		}
 		else if(strcmp(argv[k], "-dirName") == 0 && k + 1 < argc) // directory for input/output files
 		{
 			strcpy(dirName, argv[k + 1]);
@@ -107,6 +113,13 @@ void setPara(const int & argc, char * argv[], int & N, int & P, int & K, int & S
 		}
 	}
 
+	// check and re-setup the parameters
+	if(RS < 0)
+    {
+        time_t seconds;
+        seconds = time(NULL);
+        RS = seconds;
+    }
 	if(N <= 0 || P <= 0 || K <= 0 || S <= 0 || m <= 0 || m0 <= 0 || PD <= 0
         || PD > 2 || SMH <= 0 || DFMH <= 0)
 	{
